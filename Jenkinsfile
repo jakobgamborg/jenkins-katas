@@ -51,7 +51,16 @@ pipeline {
           }
         }
       }
+   
     }
+
+    stage ('test stage') {
+      when { branch != 'dev/*'}
+      steps{
+        sh 'ci/component-test.sh'
+      }
+    }
+
     stage('push docker app') {
       environment {
         DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
