@@ -66,9 +66,8 @@ pipeline {
       }
       when {
         anyOf {
-          branch "master"
-          { changeRequest() 
-          }
+          branch "master";
+           changeRequest()    
         }
       }
       steps {
