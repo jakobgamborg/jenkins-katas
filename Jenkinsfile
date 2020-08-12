@@ -31,6 +31,7 @@ pipeline {
             deleteDir()
             sh 'ls'  
             unstash 'code'
+            
           }
         }
          stage('test app') {
@@ -60,10 +61,4 @@ pipeline {
 
           }
   }
-
-      post {
-        always {
-
-            deleteDir() /* clean up our workspace */
-        }
 }
