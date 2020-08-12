@@ -64,6 +64,8 @@ pipeline {
       environment {
         DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
       }
+      anyOf
+      when { branch "master"}
       when { changeRequest() }
       steps {
         unstash 'code' //unstash the repository code
