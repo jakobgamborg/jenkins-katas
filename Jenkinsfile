@@ -64,7 +64,7 @@ pipeline {
       environment {
         DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
       }
-      when { changeRequst() }
+      when { changeRequest() }
       steps {
         unstash 'code' //unstash the repository code
         sh 'ci/build-docker.sh'
