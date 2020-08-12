@@ -1,11 +1,11 @@
 pipeline {
   agent any
-  environment{
+  environment {
     docker_username = 'spawdk'
   }
   stages {
-    stage('clone down'){
-      steps{
+    stage('clone down') {
+      steps {
         stash excludes: '.git', name: 'code'
       }
     }
@@ -28,12 +28,10 @@ pipeline {
             unstash 'code'
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
-            sh 'ls'
             stash excludes: '.git', name: 'code'
             deleteDir()
-            sh 'ls'   
           }
-          
+
           post {
             always {
               deleteDir() /* clean up our workspace */
@@ -41,7 +39,7 @@ pipeline {
           }
         }
         stage('test app') {
-          agent{
+          agent {
             docker {
               image 'gradle:jdk11'
             }
@@ -54,17 +52,16 @@ pipeline {
         }
       }
     }
-          stage('push docker app') {
-            environment {
-              DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
-              }
-            steps {
-              unstash 'code' //unstash the repository code
-              sh 'ci/build-docker.sh'
-              sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
-              sh 'ci/push-docker.sh'
+    stage('push docker app') {
+      environment {
+        DOCKERCREDS = credentials('docker_login') //use the credentials just created in this stage
+      }
+      steps {
+        unstash 'code' //unstash the repository code
+        sh 'ci/build-docker.sh'
+        sh 'echo "$DOCKERCREDS_PSW" | docker login -u "$DOCKERCREDS_USR" --password-stdin' //login to docker hub with the credentials above
+        sh 'ci/push-docker.sh'
+      }
     }
-
-          }
   }
 }
