@@ -19,7 +19,11 @@ pipeline {
           steps {
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
+            sh 'ls'
+            deleteDir()
+            sh 'ls'  
           }
+            
         }
 
       }
