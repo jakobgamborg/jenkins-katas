@@ -30,11 +30,16 @@ pipeline {
             sh 'ls'
             deleteDir()
             sh 'ls'  
-            unstash 'code'
-            
+            unstash 'code' 
+          }
+          
+          post {
+            always {
+              deleteDir() /* clean up our workspace */
+            }
           }
         }
-         stage('test app') {
+        stage('test app') {
           agent{
             docker {
               image 'gradle:jdk11'
@@ -44,6 +49,7 @@ pipeline {
             unstash 'code'
             sh 'ci/unit-test-app.sh'
             junit 'app/build/test-results/test/TEST-*.xml'
+            stash excludes: '.git', name: 'code'
           }
         }
       }
