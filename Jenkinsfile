@@ -51,11 +51,10 @@ pipeline {
           }
         }
       }
-   
     }
 
     stage ('test stage') {
-      when { branch != 'dev/*'}
+      when {not { branch 'dev/*' }}
       steps{
         sh 'ci/component-test.sh'
       }
