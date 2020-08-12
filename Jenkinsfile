@@ -29,18 +29,12 @@ pipeline {
             sh 'ls'  
             unstash 'code'
           }
-          options {
-            skipDefaultCheckout()
-          }
         }
          stage('test app') {
           agent{
             docker {
               image 'gradle:jdk11'
             }
-          }
-          options {
-            skipDefaultCheckout()
           }
           steps {
             unstash 'code'
