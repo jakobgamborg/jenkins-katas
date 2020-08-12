@@ -66,7 +66,7 @@ pipeline {
       }
       anyOf
       when { branch "master"}
-      when { changeReqeust() }
+      when { changeRequest() }
       steps {
         unstash 'code' //unstash the repository code
         sh 'ci/build-docker.sh'
