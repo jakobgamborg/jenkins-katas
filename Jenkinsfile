@@ -25,12 +25,13 @@ pipeline {
             }
           }
           steps {
+            unstash 'code'
             sh 'ci/build-app.sh'
             archiveArtifacts 'app/build/libs/'
             sh 'ls'
             deleteDir()
-            sh 'ls'  
-            unstash 'code' 
+            sh 'ls'   
+            stash excludes: '.git', name: 'code'
           }
           
           post {
@@ -49,7 +50,6 @@ pipeline {
             unstash 'code'
             sh 'ci/unit-test-app.sh'
             junit 'app/build/test-results/test/TEST-*.xml'
-            stash excludes: '.git', name: 'code'
           }
         }
       }
